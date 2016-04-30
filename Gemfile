@@ -1,16 +1,13 @@
 source 'https://rubygems.org'
 
-
 gem 'rails', '4.2.0'
-
 gem 'rails-api'
-
 gem 'spring', :group => :development
-
 gem 'sqlite3'
-
 gem 'rspec-rails' 
-
+gem 'factory_girl_rails', "~> 4.0"
+gem 'pry'
+gem 'active_model_serializers', '~> 0.10.0.rc5'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
