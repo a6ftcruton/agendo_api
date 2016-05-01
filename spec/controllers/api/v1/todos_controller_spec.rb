@@ -42,4 +42,67 @@ RSpec.describe Api::V1::TodosController, type: :controller do
       expect(response.body).to be_empty
     end
   end
+
+  describe '#create' do
+    it 'creates a record with the given title' do
+      title = "My new todo"
+
+      expect{
+        post :create,
+          todo: { title: title },
+          format: :json
+      }.to change(Todo, :count).by(1)
+
+      expect(Todo.last.title).to eq(title)
+    end
+
+    it 'fails to create a todo when title blank or empty' do
+      post :create,
+        todo: { title: "" },
+        format: :json
+
+      errors = parsed_response["errors"].first
+      expect(errors["status"]).to eq(422)
+      expect(errors["detail"]).to eq("Title can't be blank")
+    end
+  end
+
+  describe '#update' do
+    it 'updates title field for an existing todo' do
+      todo = create(:todo, title: "Rough draft")
+      new_title = "Final draft"
+
+      patch :update,
+        id: todo.id,
+        todo: {
+          title: new_title,
+          complete: true
+        }
+
+      todo.reload
+
+      expect(todo.title).to eq(new_title)
+      expect(todo.complete).to eq(true)
+      #TODO - error response for multiple errors should match json spec
+      #TODO - refactor base controller response methods to be more flexible (error_response, empty_response)
+    end
+  end
+
+  describe '#destroy' do
+    let!(:todo) { create :todo, title: "Please do not delete me" }
+
+    it 'deletes the record' do
+      expect{
+        delete :destroy, id: todo.id
+      }.to change(Todo, :count).by(-1)
+    end
+
+    it 'returns and empty response' do
+      delete :destroy, id: todo.id
+
+      expect(response.status).to eq(204)
+      expect(response.body).to be_empty
+    end
+    #TODO - after assigning relationships tags/todos, ensure that destroy removes the join record
+  end
 end

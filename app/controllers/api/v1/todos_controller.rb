@@ -10,18 +10,30 @@ class Api::V1::TodosController < Api::V1::BaseController
     if @todo.present?
       render json: @todo
     else
-      record_not_found
+      empty_response(404)
     end
   end
 
-  # def create
-  # end
+  def create
+    @todo = Todo.new(todo_params)
+    if @todo.save
+      render json: @todo
+    else
+      render json: errors_hash(422, @todo.errors.full_messages.join)
+    end
+  end
 
-  # def update
-  # end
+  def update
+    if @todo.update(todo_params)
+      empty_response(204)
+    else
+      render json: errors_hash(422, @todo.errors.full_messages.join)
+    end
+  end
 
-  # def destroy
-  # end
+  def destroy
+    empty_response(204) if @todo.destroy!
+  end
 
   private
 
@@ -33,4 +45,7 @@ class Api::V1::TodosController < Api::V1::BaseController
     @todo = Todo.find_by(id: params[:id])
   end
 
+  def todo_params
+    params.require(:todo).permit(:title, :complete)
+  end
 end

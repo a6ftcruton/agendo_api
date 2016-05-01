@@ -42,6 +42,7 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.3)
     builder (3.2.2)
+    byebug (8.2.2)
     coderay (1.1.0)
     concurrent-ruby (1.0.1)
     diff-lcs (1.2.5)
@@ -71,6 +72,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -141,6 +145,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0.rc5)
   factory_girl_rails (~> 4.0)
   pry
+  pry-byebug
   rails (= 4.2.0)
   rails-api
   rspec-rails
