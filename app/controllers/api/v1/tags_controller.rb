@@ -1,5 +1,5 @@
 class Api::V1::TagsController < ApplicationController
   def index
-    render json: {}
+    render nothing: true, status 201
   end
 end

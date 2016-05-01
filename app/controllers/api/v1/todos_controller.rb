@@ -3,7 +3,7 @@ class Api::V1::TodosController < Api::V1::BaseController
   before_filter :find_todo, only: %i(show update destroy)
 
   def index
-    render json: @todos
+    render json: @todos, mime_type: Mime::Type["application/javascript"]
   end
 
   def show
