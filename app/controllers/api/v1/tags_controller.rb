@@ -1,5 +1,5 @@
-class Api::V1::TagsController < ApplicationController
+class Api::V1::TagsController < Api::V1::BaseController
   def index
-    render nothing: true, status 201
+    empty_response(201)
   end
 end
