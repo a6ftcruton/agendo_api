@@ -1,4 +1,5 @@
 class Api::V1::TodosController < Api::V1::BaseController
+  before_filter :log_request, only: %i(index show create update destroy)
   before_filter :find_todos, only: %i(index)
   before_filter :find_todo, only: %i(show update destroy)
 
@@ -36,6 +37,14 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   private
+  def log_request
+    puts "\n"
+    puts "*" * 40
+    puts "REQUEST PARAMS == "
+    puts "#{params.inspect}"
+    puts "*" * 40
+    puts "\n"
+  end
 
   def find_todos
     @todos = Todo.all 
