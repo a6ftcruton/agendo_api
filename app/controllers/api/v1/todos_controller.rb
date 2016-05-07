@@ -42,10 +42,13 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   def find_todo
+    binding.pry
     @todo = Todo.find_by(id: params[:id])
   end
 
   def todo_params
-    params.require(:todo).permit(:title, :complete)
+    params.require(:data)
+          .require(:attributes)
+          .permit(:title, :complete)
   end
 end

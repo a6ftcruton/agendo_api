@@ -35,7 +35,7 @@ RSpec.describe Api::V1::TodosController, type: :controller do
 
     it 'returns a 404 if no record found' do
       get :show,
-        id: 999, 
+        id: 999,
         format: :json
 
       expect(response.status).to eq(404)
@@ -46,20 +46,30 @@ RSpec.describe Api::V1::TodosController, type: :controller do
   describe '#create' do
     it 'creates a record with the given title' do
       title = "My new todo"
+      json_params = 
+        { data: { 
+            attributes: {title: title}, 
+            type: "todos"
+          }
+        }
 
-      expect{
+      expect{  
         post :create,
-          todo: { title: title },
-          format: :json
+          json_params
       }.to change(Todo, :count).by(1)
 
       expect(Todo.last.title).to eq(title)
     end
 
     it 'fails to create a todo when title blank or empty' do
-      post :create,
-        todo: { title: "" },
-        format: :json
+      json_params = 
+        { data: { 
+            attributes: {title: ""}, 
+            type: "todos"
+          }
+        }
+
+      post :create, json_params
 
       errors = parsed_response["errors"].first
       expect(errors["status"]).to eq(422)
@@ -71,13 +81,17 @@ RSpec.describe Api::V1::TodosController, type: :controller do
     it 'updates title field for an existing todo' do
       todo = create(:todo, title: "Rough draft")
       new_title = "Final draft"
-
-      patch :update,
-        id: todo.id,
-        todo: {
-          title: new_title,
-          complete: true
+      json_params = 
+        { data: { 
+            attributes: {title: "#{new_title}"}, 
+            id: todo.id,
+            type: "todos"
+          }
         }
+
+      patch :update, 
+        json_params,
+        id: todo.id
 
       todo.reload
 
