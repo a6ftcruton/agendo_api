@@ -7,3 +7,6 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 Todo.create({title: "First todo"})
 Todo.create({title: "Next todo"})
+
+Tag.create({name: "Chores"})
+Tag.create({name: "This weekend"})
