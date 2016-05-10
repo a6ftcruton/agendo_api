@@ -5,8 +5,11 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Todo.create({title: "First todo"})
-Todo.create({title: "Next todo"})
+todo1 = Todo.create({title: "First todo"})
+todo2 = Todo.create({title: "Next todo"})
 
-Tag.create({name: "Chores"})
-Tag.create({name: "This weekend"})
+tag1 = Tag.create({name: "Chores"})
+tag2 = Tag.create({name: "This weekend"})
+
+Tagging.create({todo: todo1, tag: tag1})
+Tagging.create({todo: todo2, tag: tag2})
