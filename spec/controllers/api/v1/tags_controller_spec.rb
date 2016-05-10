@@ -45,20 +45,28 @@ RSpec.describe Api::V1::TagsController, type: :controller do
   describe '#create' do
     it 'creates a record with the given name' do
       name = "Chores"
+      json_params = 
+        { type: "tags",
+          attributes: {name: name}
+        }
 
       expect{
-        post :create,
-          tag: { name: name },
-          format: :json
+        post :create, 
+          data: json_params
       }.to change(Tag, :count).by(1)
 
       expect(Tag.last.name).to eq(name)
     end
 
     it 'fails to create a tag when name blank or empty' do
+      name = ""
+      json_params = 
+        { type: "tags",
+          attributes: {name: name} 
+        }
+
       post :create,
-        tag: { name: "" },
-        format: :json
+        data: json_params
 
       errors = parsed_response["errors"].first
       expect(errors["status"]).to eq(422)
@@ -68,12 +76,17 @@ RSpec.describe Api::V1::TagsController, type: :controller do
 
   describe '#update' do
     it 'updates name field for an existing tag' do
-      tag = create(:tag, name: "Work stuff")
-      new_name = "Party essentials"
+      tag         = create(:tag, name: "Work stuff")
+      new_name    = "Party essentials"
+      json_params = 
+        { type: "tags",
+          id: tag.id,
+          attributes: {name: new_name}
+        }
 
       patch :update,
         id: tag.id,
-        tag: { name: new_name }
+        data: json_params
 
       tag.reload
 

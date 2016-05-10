@@ -47,15 +47,13 @@ RSpec.describe Api::V1::TodosController, type: :controller do
     it 'creates a record with the given title' do
       title = "My new todo"
       json_params = 
-        { data: { 
-            attributes: {title: title}, 
-            type: "todos"
-          }
+        { type: "todos",
+          attributes: { title: title }
         }
 
       expect{  
         post :create,
-          json_params
+          data: json_params
       }.to change(Todo, :count).by(1)
 
       expect(Todo.last.title).to eq(title)
@@ -63,13 +61,12 @@ RSpec.describe Api::V1::TodosController, type: :controller do
 
     it 'fails to create a todo when title blank or empty' do
       json_params = 
-        { data: { 
-            attributes: {title: ""}, 
-            type: "todos"
-          }
+        { type: "todos",
+          attributes: { title: "" }
         }
 
-      post :create, json_params
+      post :create,
+        data: json_params
 
       errors = parsed_response["errors"].first
       expect(errors["status"]).to eq(422)
@@ -78,20 +75,21 @@ RSpec.describe Api::V1::TodosController, type: :controller do
   end
 
   describe '#update' do
-    it 'updates title field for an existing todo' do
+    it 'updates title and complete field for an existing todo' do
       todo = create(:todo, title: "Rough draft")
       new_title = "Final draft"
       json_params = 
-        { data: { 
-            attributes: {title: "#{new_title}"}, 
-            id: todo.id,
-            type: "todos"
+        { id: todo.id,
+          type: "todos",
+          attributes: {
+            title: "#{new_title}",
+            complete: true
           }
         }
 
       patch :update, 
-        json_params,
-        id: todo.id
+        id: todo.id,
+        data: json_params
 
       todo.reload
 

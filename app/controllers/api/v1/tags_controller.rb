@@ -1,4 +1,5 @@
 class Api::V1::TagsController < Api::V1::BaseController
+  before_filter :log_request, only: %i(index show create update destroy)
   before_filter :find_tags, only: %i(index)
   before_filter :find_tag, only: %i(show update destroy)
 
@@ -36,6 +37,14 @@ class Api::V1::TagsController < Api::V1::BaseController
   end
 
   private
+  def log_request
+    puts "\n"
+    puts "*" * 40
+    puts "REQUEST PARAMS == "
+    puts "#{params.inspect}"
+    puts "*" * 40
+    puts "\n"
+  end
 
   def find_tags
     @tags = Tag.all 
@@ -46,6 +55,8 @@ class Api::V1::TagsController < Api::V1::BaseController
   end
 
   def tag_params
-    params.require(:tag).permit(:name)
+    params.require(:data)
+          .require(:attributes)
+          .permit(:name)
   end
 end
