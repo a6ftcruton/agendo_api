@@ -1,4 +1,5 @@
 class Api::V1::TodosController < Api::V1::BaseController
+  before_filter :massage_params_for_jsonapi, only: %i(update)
   before_filter :log_request, only: %i(index show create update destroy)
   before_filter :find_todos, only: %i(index)
   before_filter :find_todo, only: %i(show update destroy)
@@ -42,6 +43,17 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   private
+  def massage_params_for_jsonapi
+    let tagKey = [:data][:relationships][:data]
+    puts "\n"
+    puts "*" * 40
+    puts "tagKey"
+    puts tagKey
+    puts "*" * 40
+    puts "\n"
+    tagKey = [] if tagKey.nil?
+  end
+
   def log_request
     puts "\n"
     puts "*" * 40
