@@ -59,10 +59,9 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   def todo_params
-    params.permit!
-    # params.require(:data)
-    #       .require(:attributes)
-    #       .permit(:title, :complete)
-    #       .permit(:relationships)
+    params.require(:data)
+          .require(:relationships)
+          .require(:attributes)
+          .permit(:title, :complete)
   end
 end
