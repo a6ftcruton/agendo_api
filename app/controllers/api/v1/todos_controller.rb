@@ -28,7 +28,7 @@ class Api::V1::TodosController < Api::V1::BaseController
     puts "todo before update\n\n #{@todo.inspect}"
     puts "todo.tags before update\n\n #{@todo.tags.inspect}"
     puts "\n\ntodo_update_params.inspect -->  #{todo_update_params.inspect}"
-    if @todo.update(todo_update_params)
+    if @todo.update!(todo_update_params)
       puts "todo after update\n\n #{@todo.inspect}"
       puts "todo.tags after update\n\n #{@todo.tags.inspect}"
       empty_response(204)
@@ -66,16 +66,10 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   def todo_update_params
-     parsed = ActiveModelSerializers::Deserialization.jsonapi_parse!(params)
-     puts "\n"
-     puts "*" * 40
-     puts "~~~~~parsed~~~~~ = #{parsed.inspect}"
-     puts "*" * 40
-     puts "\n"
-
-    puts "\n\nparams === #{params.inspect}"
-    params.require(:data)
-          .permit(:relationships)
-          .permit(:attributes)
+    # puts "\n\nparams === #{params.inspect}"
+    # params.require(:data)
+    #       .permit(:relationships)
+    #       .permit(:attributes)
+    ActiveModelSerializers::Deserialization.jsonapi_parse!(params)
   end
 end
