@@ -25,7 +25,11 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   def update
+    puts "todo before update\n\n #{@todo.inspect}"
+    puts "todo.tags before update\n\n #{@todo.tags.inspect}"
     if @todo.update(todo_params)
+      puts "todo after update\n\n #{@todo.inspect}"
+      puts "todo.tags after update\n\n #{@todo.tags.inspect}"
       empty_response(204)
     else
       render json: errors_hash(422, @todo.errors.full_messages.join)
@@ -55,9 +59,10 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   def todo_params
-    params.require(:data)
-          .require(:attributes)
-          .permit(:title, :complete)
-          .permit(:relationships)
+    params.permit!
+    # params.require(:data)
+    #       .require(:attributes)
+    #       .permit(:title, :complete)
+    #       .permit(:relationships)
   end
 end
