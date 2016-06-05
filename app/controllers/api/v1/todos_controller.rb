@@ -44,7 +44,7 @@ class Api::V1::TodosController < Api::V1::BaseController
 
   private
   def massage_params_for_jsonapi
-    let tagKey = [:data][:relationships][:data]
+    let tagKey = params[:data][:relationships][:data]
     puts "\n"
     puts "*" * 40
     puts "tagKey"
