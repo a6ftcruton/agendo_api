@@ -70,6 +70,12 @@ class Api::V1::TodosController < Api::V1::BaseController
     puts "ActiveModelSerializers::Deserialization.jsonapi_parse!(params)"
     puts ActiveModelSerializers::Deserialization.jsonapi_parse!(params).inspect
     puts "*" * 40; puts "\n" 
-    ActiveModelSerializers::Deserialization.jsonapi_parse!(params)
+    parsed = ActiveModelSerializers::Deserialization.jsonapi_parse!(params)
+    #total hack - AMS setting empty relationship params to :tag_id=>nil
+    if parsed[:tag_id].nil?
+      parsed.delete(:tag_id)
+      parsed[:tag_ids] = []
+    end
+    parsed
   end
 end

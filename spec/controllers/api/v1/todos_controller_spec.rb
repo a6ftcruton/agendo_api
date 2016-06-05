@@ -98,6 +98,31 @@ RSpec.describe Api::V1::TodosController, type: :controller do
       #TODO - error response for multiple errors should match json spec
       #TODO - refactor base controller response methods to be more flexible (error_response, empty_response)
     end
+    it 'updates relationships' do
+      tag  = create(:tag, name: "edit-tag")
+      todo = create(:todo, title: "has relationship", tag_ids: [tag.id])
+      json_params =
+        { id: todo.id,
+          type: "todos",
+          attributes: {
+            title: "hello",
+            complete: true
+          },
+          relationships: {
+            "tags": {
+              "data": nil
+            }
+          }
+        }
+
+      patch :update,
+        id: todo.id,
+        data: json_params
+
+      todo.reload
+
+      expect(todo.tags.count).to eq(0)
+    end
   end
 
   describe '#destroy' do
