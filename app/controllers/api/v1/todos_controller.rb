@@ -66,6 +66,7 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   def todo_update_params
+    puts "\n\nparams === #{params.inspect}"
     params.require(:data)
           .permit(:relationships, :attributes, :title, :complete)
   end
