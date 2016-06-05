@@ -66,8 +66,16 @@ class Api::V1::TodosController < Api::V1::BaseController
   end
 
   def todo_update_params
+     parsed = ActiveModel::Serializer::Adapter::JsonApi::Deserialization.parse(params.to_h)
+     puts "\n"
+     puts "*" * 40
+     puts "~~~~~parsed~~~~~ = #{parsed.inspect}"
+     puts "*" * 40
+     puts "\n"
+
     puts "\n\nparams === #{params.inspect}"
     params.require(:data)
-          .permit(:relationships, :attributes, :title, :complete)
+          .permit(:relationships)
+          .permit(:attributes)
   end
 end
