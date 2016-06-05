@@ -58,5 +58,6 @@ class Api::V1::TodosController < Api::V1::BaseController
     params.require(:data)
           .require(:attributes)
           .permit(:title, :complete)
+          .permit(:relationships)
   end
 end
