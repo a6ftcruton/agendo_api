@@ -27,7 +27,8 @@ class Api::V1::TodosController < Api::V1::BaseController
   def update
     puts "todo before update\n\n #{@todo.inspect}"
     puts "todo.tags before update\n\n #{@todo.tags.inspect}"
-    if @todo.update(todo_params)
+    puts "\n\ntodo_update_params.inspect -->  #{todo_update_params.inspect}"
+    if @todo.update(todo_update_params)
       puts "todo after update\n\n #{@todo.inspect}"
       puts "todo.tags after update\n\n #{@todo.tags.inspect}"
       empty_response(204)
