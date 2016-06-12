@@ -185,6 +185,24 @@ RSpec.describe Api::V1::TodosController, type: :controller do
         expect(todo.tags.count).to eq(1)
         expect(todo.tags.first.name).to eq("keep")
       end
+
+      it 'debugging AMS bad deserialization of empty params' do
+        tag  = create(:tag, name: "edit-tag")
+        todo = create(:todo, title: "has relationship", tag_ids: [tag.id])
+        json_params = 
+          {"id":"#{todo.id}",
+           "type":"todos",
+           "attributes": {"title":"y","complete":false},
+           "relationships": {"tags":{"data":[]}}}
+
+        patch :update,
+          id: todo.id,
+          data: json_params
+
+        todo.reload
+
+        expect(todo.tags.count).to eq(0)
+      end
     end
   end
 

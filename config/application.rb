@@ -31,6 +31,9 @@ module AgendoApi
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    # Allow empty array as params so that we can remove all tags from relationship
+    config.action_dispatch.perform_deep_munge = false
+
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'

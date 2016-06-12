@@ -70,8 +70,6 @@ class Api::V1::TodosController < Api::V1::BaseController
     puts "ActiveModelSerializers::Deserialization.jsonapi_parse!(params)"
     puts ActiveModelSerializers::Deserialization.jsonapi_parse!(params).inspect
     puts "*" * 40; puts "\n" 
-    parsed = ActiveModelSerializers::Deserialization.jsonapi_parse!(params)
-    #TODO - be sure the tag_id nil crap isn't messing things up
-    parsed
+    ActiveModelSerializers::Deserialization.jsonapi_parse!(params)
   end
 end
