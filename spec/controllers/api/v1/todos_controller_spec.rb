@@ -98,30 +98,93 @@ RSpec.describe Api::V1::TodosController, type: :controller do
       #TODO - error response for multiple errors should match json spec
       #TODO - refactor base controller response methods to be more flexible (error_response, empty_response)
     end
-    it 'updates relationships' do
-      tag  = create(:tag, name: "edit-tag")
-      todo = create(:todo, title: "has relationship", tag_ids: [tag.id])
-      json_params =
-        { id: todo.id,
-          type: "todos",
-          attributes: {
-            title: "hello",
-            complete: true
-          },
-          relationships: {
-            "tags": {
-              "data": nil
+
+    context 'relationships' do
+      it 'adds a tag' do
+        tag  = create(:tag, name: "edit-tag")
+        todo = create(:todo, title: "has relationship", tag_ids: [])
+        json_params =
+          { id: todo.id,
+            type: "todos",
+            attributes: {
+              title: "hello",
+              complete: true
+            },
+            relationships: {
+              "tags": {
+                "data": [
+                  {type: "tags", id: tag.id}
+                ]
+              }
             }
           }
-        }
 
-      patch :update,
-        id: todo.id,
-        data: json_params
+        patch :update,
+          id: todo.id,
+          data: json_params
 
-      todo.reload
+        todo.reload
 
-      expect(todo.tags.count).to eq(0)
+        expect(response.status).to eq(204)
+        expect(todo.tags.count).to eq(1)
+      end
+
+      it 'removes an existing tag' do
+        tag  = create(:tag, name: "edit-tag")
+        todo = create(:todo, title: "has relationship", tag_ids: [tag.id])
+        json_params =
+          { id: todo.id,
+            type: "todos",
+            attributes: {
+              title: "hello",
+              complete: true
+            },
+            relationships: {
+              "tags": {
+                "data": []
+              }
+            }
+          }
+
+        patch :update,
+          id: todo.id,
+          data: json_params
+
+        todo.reload
+
+        expect(todo.tags.count).to eq(0)
+      end
+
+      it 'removes the correct tag existing tag' do
+        keep_tag    = create(:tag, name: "keep")
+        remove_tag  = create(:tag, name: "remove")
+        todo        = create(:todo, title: "has relationship", tag_ids: [keep_tag.id, remove_tag.id])
+        json_params =
+          { id: todo.id,
+            type: "todos",
+            attributes: {
+              title: "hello",
+              complete: true
+            },
+            relationships: {
+              "tags": {
+                "data": [
+                  {type: "tags", id: keep_tag.id}
+                ]
+              }
+            }
+          }
+
+        patch :update,
+          id: todo.id,
+          data: json_params
+
+        todo.reload
+
+        expect(response.status).to eq(204)
+        expect(todo.tags.count).to eq(1)
+        expect(todo.tags.first.name).to eq("keep")
+      end
     end
   end
 
