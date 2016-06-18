@@ -113,5 +113,18 @@ RSpec.describe Api::V1::TagsController, type: :controller do
     end
     #tag - after assigning relationships tags/tags, ensure that destroy removes the join record
   end
+  describe '#destroy with tags' do
+    it 'deletes a record and associated tags' do
+      tag  = create(:tag, name: "tester")
 
+      #create a tagging record
+      todo = create(:todo, title: "howdy", tag_ids: [tag.id])
+
+      delete :destroy, id: tag.id
+
+      expect(response.status).to eq(204)
+      expect(Tag.count).to eq(0)
+      expect(Tagging.count).to eq(0)
+    end
+  end
 end

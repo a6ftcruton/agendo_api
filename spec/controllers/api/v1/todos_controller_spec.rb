@@ -221,6 +221,18 @@ RSpec.describe Api::V1::TodosController, type: :controller do
       expect(response.status).to eq(204)
       expect(response.body).to be_empty
     end
+  end
     #TODO - after assigning relationships tags/todos, ensure that destroy removes the join record
+  describe '#destroy with tags' do
+    it 'deletes a record and associated tags' do
+      tag  = create(:tag, name: "tester")
+      todo = create(:todo, title: "howdy", tag_ids: [tag.id])
+
+      delete :destroy, id: todo.id
+
+      expect(response.status).to eq(204)
+      expect(Todo.count).to eq(0)
+      expect(Tagging.count).to eq(0)
+    end
   end
 end
