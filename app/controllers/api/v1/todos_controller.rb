@@ -54,7 +54,8 @@ class Api::V1::TodosController < Api::V1::BaseController
 
   def prevent_munge_error
     #in config.action_dispatch.perform_deep_munge = false  not working
-    params[:data][:relationships][:tags][:data] ||= []
+    puts "params => #{params.inspect}"
+    # params[:data][:relationships][:tags][:data] ||= []
   end
 
   def find_todos
